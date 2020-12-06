@@ -19,7 +19,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-var seco = false;
+var color = null;
 
 class App extends Component {
   constructor(props) {
@@ -35,17 +35,31 @@ class App extends Component {
         correo: "",
       },
       humidity: 0,
+      led: null,
+      text: null,
     };
   }
 
   componentWillMount() {
-    const humedad = firebase.database().ref().child("ESP32").child("Corriente");
+    const humedad = firebase.database().ref().child("ESP32").child("Humedad");
     humedad.on("value", (snapshot) => {
       this.setState({
         humidity: snapshot.val(),
       });
     });
-    console.log(humedad);
+    const digital = firebase.database().ref().child("ESP32").child("LED");
+    digital.on("value", (snapshot) => {
+      this.setState({
+        led: snapshot.val(),
+      });
+    });
+    const textString = firebase.database().ref().child("ESP32").child("Motor");
+    textString.on("value", (snapshot) => {
+      this.setState({
+        text: snapshot.val(),
+      });
+    });
+    // color =
   }
 
   render() {
@@ -83,35 +97,27 @@ class App extends Component {
                   esta manera prender una motobomba
                 </p>
               </div>
-              <p>Kimolemtros recorridos: {this.state.humidity}</p>
-              <div>
-                {seco ? (
-                  <div className="row text-center ">
-                    <p style = {{marginRight: 50}}>El suelo esta muy seco se activara motobomba</p>
-                    <img
-                      src={LOGO}
-                      width="30"
-                      height="30"
-                      class="d-inline-block align-top"
-                      alt=""
-                      loading="lazy"
-                    />
-                  </div>
-                ) : (
-                  <div className="row text-center">
-                    <p>El suelo esta muy humedo se desactivara la motobomba</p>
-                    <img
-                      src={LOGO}
-                      width="30"
-                      height="30"
-                      class="d-inline-block align-top"
-                      alt=""
-                      loading="lazy"
-                    />
-                  </div>
-                )}
+              <p>Humedad Relativa: {this.state.humidity} %</p>
+
+              <div className="row text-center ">
+                <div style = {{alignItems: 'center', justifyContent: 'center'}}>
+                  <p style={{ paddingLeft: 50, fontSize:15 }}>
+                    El suelo esta muy seco se {this.state.text} motobomba: {" "}
+                  </p>
+                </div>
+                
+                <div style = {{alignItems: 'center', justifyContent: 'center'}}>
+                  <p
+                    style={{
+                      backgroundColor: this.state.led,
+                      borderRadius: 10,
+                    }}
+                  >
+                    
+                    Motor
+                  </p>
+                </div>
               </div>
-              
             </div>
           </div>
         </div>
