@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import firebase from "firebase";
+import LOGO from "./logo-universidad-del-cauca.png";
+import SLIDER from "./slider.jpg";
+import "./App.css";
 
 // import image from '../images/haderpartida.jpg'
 
@@ -15,6 +18,8 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+var seco = false;
 
 class App extends Component {
   constructor(props) {
@@ -46,12 +51,68 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="imagen-fondo">
-          <h1>Bienvenido a una nueva partida</h1>
-        </div>
-        <div className="row">
-          <div className="col-6 drch">
-            Kimolemtros recorridos: {this.state.humidity} <br />
+        <nav className="navbar navbar-light bg-light">
+          <div className="navbar-brand">
+            <img
+              src={LOGO}
+              width="30"
+              height="30"
+              class="d-inline-block align-top"
+              alt=""
+              loading="lazy"
+            />
+            Humedad
+          </div>
+        </nav>
+        <div className="Body">
+          <div className="row">
+            <div className="col-6">
+              <div className="text-center">
+                <p className="Title">Proyecto sensor humedad</p>
+              </div>
+              <img src={SLIDER} width="680" height="300" />
+            </div>
+            <div className="col-6">
+              <div className="text-center">
+                <p className="Title">Datos del sensor en tiempo real</p>
+              </div>
+              <div>
+                <p>
+                  Se recibe los datos del sensor. Y se compara con los datos
+                  preestablecidos para saber si esta muy humedo o muy seco de
+                  esta manera prender una motobomba
+                </p>
+              </div>
+              <p>Kimolemtros recorridos: {this.state.humidity}</p>
+              <div>
+                {seco ? (
+                  <div className="row text-center ">
+                    <p style = {{marginRight: 50}}>El suelo esta muy seco se activara motobomba</p>
+                    <img
+                      src={LOGO}
+                      width="30"
+                      height="30"
+                      class="d-inline-block align-top"
+                      alt=""
+                      loading="lazy"
+                    />
+                  </div>
+                ) : (
+                  <div className="row text-center">
+                    <p>El suelo esta muy humedo se desactivara la motobomba</p>
+                    <img
+                      src={LOGO}
+                      width="30"
+                      height="30"
+                      class="d-inline-block align-top"
+                      alt=""
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+              </div>
+              
+            </div>
           </div>
         </div>
       </React.Fragment>
